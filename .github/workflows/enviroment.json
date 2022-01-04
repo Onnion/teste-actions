@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "7f91ca45-95e6-4b65-89aa-de28e1c2426e",
+		"name": "POSTMAN - API Site",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "426bffc7-bda0-4fd6-a32d-6d5760f58470",
+						"exec": [
+							"let base = '{{Cliente Id}}:{{Cliente Secret}}';",
+							"let base64 = btoa(base);",
+							"postman.setEnvironmentVariable(\"auth\", base64);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d85f4a6b-3ba6-4ec3-b28b-66c45adea2ac",
+						"exec": [
+							"tests[\"response code is 200\"] = responseCode.code === 201;",
+							"tests[\"Contém Token\"] = responseBody.has(\"\\\"access_token\\\":\");",
+							"tests[\"Contém token_type\"] = responseBody.has(\"\\\"token_type\\\":\");",
+							"tests[\"Contém expires_in\"] = responseBody.has(\"\\\"expires_in\\\":\");",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"postman.setGlobalVariable('access_token', body[\"access_token\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic {{auth}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"username\":\"{{login}}\",\n\"password\":\"{{senha}}\",\n\"integracaoSite\":\"true\",\n\"grant_type\":\"password\"\n}"
+				},
+				"url": {
+					"raw": "https://hlg-webmotors.sensedia.com/oauth/v1/access-token",
+					"protocol": "https",
+					"host": [
+						"hlg-webmotors",
+						"sensedia",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"v1",
+						"access-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inserir Lead Site",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "426bffc7-bda0-4fd6-a32d-6d5760f58470",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d85f4a6b-3ba6-4ec3-b28b-66c45adea2ac",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "access_token",
+						"value": "{{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"partner_id\": 122711961,\n\t\"group_id\": 0,\n\t\"name\": \"Eduardo Valide Site\",\n\t\"email\": \"consultor5a.sionti@webmotors.com.br\",\n\t\"phone\": \"1144587485\",\n\t\"mobile\": \"119716617854\",\n\t\"state\": \"SP\",\n\t\"city\": \"São Paulo\",\n\t\"message\": \"Lead Site Contato - tipo 6\",\n\t\"type\": \"6\",\n\t\"finance\": 0,\n\t\"trade\": 0,\n\t\"whatsapp\": 0\n}"
+				},
+				"url": {
+					"raw": "https://hlg-webmotors.sensedia.com/site/v1/lead",
+					"protocol": "https",
+					"host": [
+						"hlg-webmotors",
+						"sensedia",
+						"com"
+					],
+					"path": [
+						"site",
+						"v1",
+						"lead"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar estoque",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cde09758-e757-4e29-823b-e78f50bc2d3d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "access_token",
+						"value": "{{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hlg-webmotors.sensedia.com/site/v1/estoque?brand=VOLKSWAGEN",
+					"protocol": "https",
+					"host": [
+						"hlg-webmotors",
+						"sensedia",
+						"com"
+					],
+					"path": [
+						"site",
+						"v1",
+						"estoque"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "VOLKSWAGEN"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
